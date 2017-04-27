@@ -37,8 +37,12 @@ for i in tqdm(range(len(images))):
     sitk.WriteImage(truth,'./data/mhas/{}_{}.mha'.format(imgName,'seg'))
     sitk.WriteImage(dist,'./data/mhas/{}_{}.mha'.format(imgName,'distance'))
     sitk.WriteImage(skel_img,'./data/mhas/{}_{}.mha'.format(imgName,'skeleton'))
-    
-    im_file.write('/home/marsdenlab/projects/DeepVessel/data/{}
+
+    imfile.write('/home/marsdenlab/projects/DeepVessel/data/mhas/{}.mha\n'.format(imgName))
+    segfile.write('/home/marsdenlab/projects/DeepVessel/data/mhas/{}_{}.mha\n'.format(imgName,'seg'))
+    distfile.write('/home/marsdenlab/projects/DeepVessel/data/mhas/{}_{}.mha\n'.format(imgName, 'distance'))
+    skelfile.write('/home/marsdenlab/projects/DeepVessel/data/mhas/{}_{}.mha\n'.format(imgName,'skel'))
+
     #plot maximum intensity projections
     axes = [0,1,2]
     for a in axes:
