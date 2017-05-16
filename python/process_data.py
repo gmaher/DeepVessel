@@ -20,6 +20,7 @@ skelfile = open('processed_skeletons.txt','w')
 
 for i in tqdm(range(len(images))):
     imgName = images[i].split('/')[-1].replace('-cm.mha','')
+    imgName = imgName.replace('-image.mha','')
     img = sitk.ReadImage(images[i])
     truth = sitk.ReadImage(truths[i])
 
