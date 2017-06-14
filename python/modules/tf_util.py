@@ -35,5 +35,17 @@ def conv3D_N(x, activation=tf.nn.relu, shape=[3,3,3],nfilters=32,init=1e-3,scope
 
     return o
 
+def resnet_conv3D_N(x, activation=tf.nn.relu, shape=[3,3,3],nfilters=32,init=1e-3,scope='conv3dn',N=2):
+    o = x
+    for i in range(N-1):
+        s = scope +'_'+str(i)
+        o = conv3D(o,activation,shape,nfilters,init,s)
+
+    s = scope +'_'+str(N)
+    o = conv3D(o,tf.identity,shape,nfilters,init,s)
+    y = activation(o+x)
+
+    return y
+
 def downsample3D_2(x, scope='downsample3d', reuse=False):
     pass
