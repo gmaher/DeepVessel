@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 # Get data
 #######################################################
 data_path = '/home/marsdenlab/datasets/DeepVesselData/'
-train = data_path+'train_dist.hdf5'
-val = data_path+'val_dist.hdf5'
-test = data_path+'test_dist.hdf5'
+train = data_path+'train_dist72.hdf5'
+val = data_path+'val_dist72.hdf5'
+test = data_path+'test_dist72.hdf5'
 
 f_train = tables.open_file(train)
 f_val = tables.open_file(val)
@@ -38,16 +38,19 @@ print_step=100
 x = tf.placeholder(shape=[None,W,H,D,C],dtype=tf.float32)
 y = tf.placeholder(shape=[None,W,H,D,C],dtype=tf.float32)
 #Lets make a resnet!
-o_1 = tf_util.conv3D_N(x,scope='first_conv')
+o_1 = tf_util.conv3D_N(x,scope='first_conv',init=0.0)
 y_1 = o_1+x
 
-o_2 = tf_util.conv3D_N(y_1,scope='second_conv')
+o_2 = tf_util.conv3D_N(y_1,scope='second_conv',init=0.0)
 y_2 = y_1+o_2
 
-o_3 = tf_util.conv3D_N(y_2,scope='third_conv')
+o_3 = tf_util.conv3D_N(y_2,scope='third_conv',init=0.0)
 y_3 = y_2+o_3
 
-yhat = tf_util.conv3D(y_3,tf.identity,nfilters=1,scope='yhat')
+o_4 = tf_util.conv3D_N(y_3,scope='fourth_conv',init=0.0)
+y_4 = y_3+o_4
+
+yhat = tf_util.conv3D(y_4,tf.identity,nfilters=1,scope='yhat')
 yclass = tf.sigmoid(yhat)
 
 loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(labels=y,logits=yhat,name='loss'))
