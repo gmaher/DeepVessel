@@ -19,7 +19,7 @@ def conv3D(x, activation=tf.nn.relu, shape=[3,3,3],nfilters=32, init=1e-3, scope
         shape = shape +[int(s[4]),nfilters]
         W = tf.Variable(tf.random_normal(shape=shape,stddev=init),
             name='W')
-        b = tf.Variable(tf.ones([nfilters]), name='b')
+        b = tf.Variable(tf.ones([nfilters])*init, name='b')
 
         h = tf.nn.convolution(x,W,padding='SAME',strides=[1,1,1], name='h')+b
 
