@@ -29,22 +29,22 @@ Nval = f_val.root.X.shape[0]
 W,H,D = f_train.root.X[0].shape
 C = 1
 Nbatch = 16
-lr = 1e-2
-Nsteps=10
+lr = 5e-3
+Nsteps=5000
 print_step=100
 init = 1e-3
-Nlayers = 6
+Nlayers = 5
 #########################################################
 # Define graph
 #########################################################
-x = tf.placeholder(shape=[None,W,H,D,C],dtype=tf.float32)
-y = tf.placeholder(shape=[None,W,H,D,C],dtype=tf.float32)
+x = tf.placeholder(shape=[Nbatch,W,H,D,C],dtype=tf.float32)
+y = tf.placeholder(shape=[Nbatch,W,H,D,C],dtype=tf.float32)
 
 o_4 = tf_util.conv3D_N(x,N=Nlayers)
 
 yhat = tf_util.conv3D(o_4,tf.identity,nfilters=1,scope='yhat',init=init)
 yclass = tf.sigmoid(yhat)
-
+# yhat,yclass = tf_util.UNET3D(x)
 loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(labels=y,logits=yhat,name='loss'))
 
 opt = tf.train.AdamOptimizer(lr)

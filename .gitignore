@@ -1,2 +1,4 @@
 */data/*
 *.png
+/python/models
+/python/output
