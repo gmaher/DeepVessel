@@ -11,7 +11,7 @@ data_path = '/home/marsdenlab/datasets/DeepVesselData/'
 train = data_path+'train_dist72.hdf5'
 val = data_path+'val_dist72.hdf5'
 test = data_path+'test_dist72.hdf5'
-
+save_dir = './models/cnn'
 f_train = tables.open_file(train)
 f_val = tables.open_file(val)
 
@@ -30,7 +30,7 @@ W,H,D = f_train.root.X[0].shape
 C = 1
 Nbatch = 16
 lr = 1e-2
-Nsteps=10000
+Nsteps=10
 print_step=100
 init = 1e-3
 Nlayers = 6
@@ -62,6 +62,7 @@ train_hist = []
 val_hist = []
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
+saver = tf.train.Saver()
 for i in range(Nsteps):
     xb,yb = tf_util.get_batch(f_train.root.X,f_train.root.Y,N,n=Nbatch,y_index=0)
     l,_=sess.run([loss,train],{x:xb,y:yb})
@@ -72,6 +73,7 @@ for i in range(Nsteps):
         lval=sess.run(loss,{x:xb,y:yb})
         print "Train: {}, Val: {}".format(l,lval)
 
+saver.save(sess,'./models/cnn/cnn')
 ######################################################
 # Plot
 ######################################################
