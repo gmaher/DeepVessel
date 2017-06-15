@@ -28,35 +28,32 @@ N = f_train.root.X.shape[0]
 Nval = f_val.root.X.shape[0]
 W,H,D = f_train.root.X[0].shape
 C = 1
-Nbatch = 10
-lr = 1e-3
-Nsteps=1000
+Nbatch = 16
+lr = 1e-2
+Nsteps=10000
 print_step=100
+init = 1e-3
+Nlayers = 6
 #########################################################
 # Define graph
 #########################################################
 x = tf.placeholder(shape=[None,W,H,D,C],dtype=tf.float32)
 y = tf.placeholder(shape=[None,W,H,D,C],dtype=tf.float32)
-#Lets make a resnet!
-o_1 = tf_util.conv3D_N(x,scope='first_conv',init=0.0)
-y_1 = o_1+x
 
-o_2 = tf_util.conv3D_N(y_1,scope='second_conv',init=0.0)
-y_2 = y_1+o_2
+o_4 = tf_util.conv3D_N(x,N=Nlayers)
 
-o_3 = tf_util.conv3D_N(y_2,scope='third_conv',init=0.0)
-y_3 = y_2+o_3
-
-o_4 = tf_util.conv3D_N(y_3,scope='fourth_conv',init=0.0)
-y_4 = y_3+o_4
-
-yhat = tf_util.conv3D(y_4,tf.identity,nfilters=1,scope='yhat')
+yhat = tf_util.conv3D(o_4,tf.identity,nfilters=1,scope='yhat',init=init)
 yclass = tf.sigmoid(yhat)
 
 loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(labels=y,logits=yhat,name='loss'))
 
 opt = tf.train.AdamOptimizer(lr)
 train = opt.minimize(loss)
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+print yhat
 
 #######################################################
 # Train
