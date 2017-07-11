@@ -2,3 +2,4 @@
 *.png
 /python/models
 /python/output
+*.pyc
